@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Деталі продукту</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<h1>Деталі продукту</h1>
+<p><strong>Назва:</strong> <span th:text="${product.name}"></span></p>
+<p><strong>Ціна:</strong> <span th:text="${product.price}"></span></p>
+<p><strong>Категорія:</strong> <span th:text="${product.category.name}"></span></p>
+<a href="/products">Повернутися до списку продуктів</a>
+</body>
+</html>

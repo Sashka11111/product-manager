@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Редагувати продукт</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<h1>Редагувати продукт</h1>
+<form action="/products/edit/{id}" method="post">
+  <label for="name">Назва:</label>
+  <input type="text" id="name" name="name" th:value="${product.name}" required>
+
+  <label for="price">Ціна:</label>
+  <input type="number" id="price" name="price" th:value="${product.price}" required>
+
+  <label for="category">Категорія:</label>
+  <select id="category" name="category.id">
+    <th:block th:each="category : ${categories}">
+      <option th:value="${category.id}" th:text="${category.name}" th:selected="${category.id == product.category.id}"></option>
+    </th:block>
+  </select>
+
+  <button type="submit">Оновити</button>
+</form>
+<a href="/products">Повернутися до списку продуктів</a>
+</body>
+</html>

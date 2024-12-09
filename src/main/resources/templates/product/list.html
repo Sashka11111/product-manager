@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Список продуктів</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<h1>Список продуктів</h1>
+
+<!-- Форма пошуку та фільтрації -->
+<form action="/products" method="get">
+  <input type="text" name="search" placeholder="Пошук за назвою" value="${search}">
+  <select name="category">
+    <option value="">Виберіть категорію</option>
+    <th:block th:each="category : ${categories}">
+      <option th:value="${category.id}" th:text="${category.name}" th:selected="${category.id == categoryId}"></option>
+    </th:block>
+  </select>
+  <input type="number" name="minPrice" placeholder="Мінімальна ціна" value="${minPrice}">
+  <input type="number" name="maxPrice" placeholder="Максимальна ціна" value="${maxPrice}">
+  <button type="submit">Фільтрувати</button>
+</form>
+
+<a href="/products/add">Додати новий продукт</a>
+
+<table>
+  <thead>
+  <tr>
+    <th>Назва</th>
+    <th>Ціна</th>
+    <th>Категорія</th>
+    <th>Дії</th>
+  </tr>
+  </thead>
+  <tbody>
+  <th:block th:each="product : ${products}">
+    <tr>
+      <td th:text="${product.name}"></td>
+      <td th:text="${product.price}"></td>
+      <td th:text="${product.category.name}"></td>
+      <td>
+        <a th:href="@{/products/{id}(id=${product.id})}" class="view">Переглянути</a>
+        <a th:href="@{/products/edit/{id}(id=${product.id})}" class="edit">Редагувати</a>
+        <a th:href="@{/products/delete/{id}(id=${product.id})}" class="delete" th:onclick="return confirm('Ви впевнені?')">Видалити</a>
+      </td>
+    </tr>
+  </th:block>
+  </tbody>
+</table>
+
+<!-- Пагінація -->
+<div>
+  <a th:href="@{/products/list(page=${currentPage - 1}, size=${size})}"
+     th:if="${currentPage > 0}">« Попередня</a>
+
+  <a th:href="@{/products/list(page=${currentPage + 1}, size=${size})}"
+     th:if="${currentPage < totalPages - 1}">Наступна »</a>
+</div>
+</body>
+</html>
