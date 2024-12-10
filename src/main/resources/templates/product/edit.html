@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>Редагувати продукт</h1>
-<form action="/products/edit/{id}" method="post">
+<form th:action="@{'/products/edit/' + ${product.id}}" method="post">
   <label for="name">Назва:</label>
   <input type="text" id="name" name="name" th:value="${product.name}" required>
 

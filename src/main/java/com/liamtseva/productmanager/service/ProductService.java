@@ -1,14 +1,14 @@
 package com.liamtseva.productmanager.service;
 
-import com.liamtseva.productmanager.model.Category;
+import com.liamtseva.productmanager.ProductSpecification;
 import com.liamtseva.productmanager.model.Product;
 import com.liamtseva.productmanager.repository.ProductRepository;
-import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,42 +48,44 @@ public class ProductService {
     }
     return null; // Якщо продукт не знайдений
   }
+  public List<Product> getFilteredProducts(String name, Long categoryId, Double minPrice, Double maxPrice, String sortBy) {
+    // Створюємо умови для фільтрації
+    Specification<Product> spec = Specification.where(null);
+
+    if (name != null && !name.isEmpty()) {
+      spec = spec.and(ProductSpecification.hasName(name)); // Фільтруємо за назвою
+    }
+    if (categoryId != null) {
+      spec = spec.and(ProductSpecification.hasCategoryId(categoryId)); // Фільтруємо за категорією
+    }
+    if (minPrice != null) {
+      spec = spec.and(ProductSpecification.hasMinPrice(minPrice)); // Фільтруємо за мінімальною ціною
+    }
+    if (maxPrice != null) {
+      spec = spec.and(ProductSpecification.hasMaxPrice(maxPrice)); // Фільтруємо за максимальною ціною
+    }
+
+    // Сортуємо за зазначеним полем
+    Sort sort = Sort.by(Sort.Direction.ASC, sortBy);
+
+    // Повертаємо список продуктів відповідно до фільтрів і сортування
+    return productRepository.findAll(spec, sort);
+  }
 
   // Метод для видалення продукту
   public void deleteProduct(Long id) {
     productRepository.deleteById(id);
   }
   // Метод для отримання всіх продуктів, відсортованих за категорією
-  public List<Product> getProductsSortedByCategory(Long categoryId) {
-    return productRepository.findAllByCategory_Id(categoryId, Sort.by(Sort.Order.asc("category"))); // Сортуємо за категорією
+  public List<Product> getProductsSortedByCategory() {
+    return productRepository.findAll(Sort.by("category.name"));
   }
-  // Метод для отримання продуктів з пагінацією
+  //Метод для отримання продуктів з пагінацією
   public Page<Product> getProducts(int page, int size) {
     Pageable pageable = PageRequest.of(page, size); // Створюємо об'єкт Pageable
     return productRepository.findAll(pageable); // Отримуємо продукти для відповідної сторінки
   }
-
-  // Фільтрація продуктів за категорією
-  public Page<Product> getProductsByCategory(Category category, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size);
-    return productRepository.findByCategory(category, pageable);
-  }
-
-  // Фільтрація продуктів за ціновим діапазоном
-  public Page<Product> getProductsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size);
-    return productRepository.findByPriceBetween(minPrice, maxPrice, pageable);
-  }
-
-  // Фільтрація продуктів за категорією та ціною
-  public Page<Product> getProductsByCategoryAndPriceRange(Category category, BigDecimal minPrice, BigDecimal maxPrice, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size);
-    return productRepository.findByCategoryAndPriceBetween(category, minPrice, maxPrice, pageable);
-  }
-
-  // Фільтрація продуктів за назвою
-  public Page<Product> getProductsByName(String name, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size);
-    return productRepository.findByNameContaining(name, pageable);
+  public List<Product> getAllProductsSortedByCategory() {
+    return productRepository.findAll(Sort.by(Sort.Order.asc("category.name")));
   }
 }
