@@ -122,4 +122,36 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
   background-color: #45a049;
+}/* Загальний стиль контейнера пагінації */
+div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  gap: 5px;
+}
+
+/* Стиль для посилань пагінації */
+div a {
+  text-decoration: none;
+  color: #007bff;
+  font-size: 14px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Стиль для активного посилання */
+div a[aria-current="true"] {
+  background-color: #007bff;
+  color: white;
+  pointer-events: none;
+  font-weight: bold;
+}
+
+/* Стиль для наведення на посилання */
+div a:hover {
+  background-color: #007bff;
+  color: white;
 }

@@ -9,6 +9,6 @@ public class MainController {
   @GetMapping("/")
   public String showHomePage() {
     // Повертає HTML-сторінку
-    return "index";  // сторінка буде шукатись у ресурсах під /templates/index.html
+    return "index";
   }
 }

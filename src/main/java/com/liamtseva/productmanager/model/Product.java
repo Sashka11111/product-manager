@@ -11,7 +11,6 @@ public class Product {
 
   private String name;
   private Double price;
-  private String photo;
 
   @ManyToOne
   @JoinColumn(name = "category_id", nullable = false)
@@ -21,10 +20,9 @@ public class Product {
   public Product() {}
 
   // Конструктор з параметрами
-  public Product(String name, Double price, String photo, Category category) {
+  public Product(String name, Double price, Category category) {
     this.name = name;
     this.price = price;
-    this.photo = photo;
     this.category = category;
   }
 
@@ -53,14 +51,6 @@ public class Product {
     this.price = price;
   }
 
-  public String getPhoto() {
-    return photo;
-  }
-
-  public void setPhoto(String photo) {
-    this.photo = photo;
-  }
-
   public Category getCategory() {
     return category;
   }
@@ -76,7 +66,6 @@ public class Product {
         "id=" + id +
         ", name='" + name + '\'' +
         ", price=" + price +
-        ", photo='" + photo + '\'' +
         ", category=" + category.getName() +
         '}';
   }

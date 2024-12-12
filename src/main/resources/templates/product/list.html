@@ -1,28 +1,42 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Список продуктів</title>
+  <title>Продукти</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<h1>Список продуктів</h1>
+<h1>Продукти</h1>
 
-<!-- Форма пошуку та фільтрації -->
-<form action="/products" method="get">
-  <input type="text" name="search" placeholder="Пошук за назвою" value="${search}">
-  <select name="category">
-    <option value="">Виберіть категорію</option>
+<!-- Форма для фільтрації -->
+<form method="get" action="/products">
+  <label for="category">Категорії:</label>
+  <select name="category" id="category">
+    <option value="">Всі</option>
+    <!-- Вивід категорій -->
     <th:block th:each="category : ${categories}">
-      <option th:value="${category.id}" th:text="${category.name}" th:selected="${category.id == categoryId}"></option>
+      <option th:value="${category.id}" th:text="${category.name}"></option>
     </th:block>
   </select>
-  <input type="number" name="minPrice" placeholder="Мінімальна ціна" value="${minPrice}">
-  <input type="number" name="maxPrice" placeholder="Максимальна ціна" value="${maxPrice}">
+
+  <label for="minPrice">Мінімальна ціна:</label>
+  <input type="number" name="minPrice" id="minPrice" step="0.01">
+
+  <label for="maxPrice">Maксимальна ціна:</label>
+  <input type="number" name="maxPrice" id="maxPrice" step="0.01">
+
+  <label for="sortBy">Сортувати за:</label>
+  <select name="sortBy" id="sortBy">
+    <option value="id">Стандарт</option>
+    <option value="price">Ціна</option>
+    <option value="category.name">Категорія</option>
+  </select>
+
   <button type="submit">Фільтрувати</button>
 </form>
+
 <a href="/products/add">Додати новий продукт</a>
+<!-- Таблиця продуктів -->
 
 <table>
   <thead>
@@ -48,5 +62,18 @@
   </th:block>
   </tbody>
 </table>
+
+<!-- Пагінація -->
+<div>
+        <span th:if="${currentPage > 0}">
+            <a th:href="@{/products(page=${currentPage - 1})}">Попередня</a>
+        </span>
+  <span th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}">
+            <a th:href="@{/products(page=${pageNumber})}" th:text="${pageNumber + 1}"></a>
+        </span>
+  <span th:if="${currentPage < totalPages - 1}">
+            <a th:href="@{/products(page=${currentPage + 1})}">Наступна</a>
+        </span>
+</div>
 </body>
 </html>
