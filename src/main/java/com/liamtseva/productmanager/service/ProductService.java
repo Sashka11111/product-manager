@@ -26,18 +26,8 @@ public class ProductService {
     return productRepository.findById(id);
   }
 
-  // Метод для додавання нового продукту
-  public Product addProduct(Product product) {
-    return productRepository.save(product);
-  }
-
-  // Метод для оновлення продукту
-  public Product updateProduct(Long id, Product product) {
-    if (productRepository.existsById(id)) {
-      product.setId(id);
-      return productRepository.save(product);
-    }
-    return null; // Якщо продукт не знайдений
+  public void save(Product product) {
+    productRepository.save(product);
   }
 
   // Метод для видалення продукту
